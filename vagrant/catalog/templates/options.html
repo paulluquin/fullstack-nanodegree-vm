@@ -1,0 +1,76 @@
+<head>
+  <title>Edit Car Option</title>
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='styles/styles.css') }}">
+
+</head>
+<body>
+  <p>
+      {% if login_session['username']!=nullable %}
+        <h2>Current User: {{login_session['username']}}</h2>
+        <a href='{{url_for('gdisconnect')}}' >
+          <button class="ButtonDefault">  LOGOUT  </button>
+        </a>
+      {% endif %}
+      {% if login_session['username']==nullable %}
+        <h2>View Only - Login to access edit mode</h2>
+        <a href='{{url_for('showLogin')}}' >
+          <button class="ButtonDefault">  LOGIN  </button>
+        </a>
+      {% endif %}
+  </P>
+  <h1>Option</h1>
+  <div class = 'flash'>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <div class = 'optionDetail'>
+    <p>{{car.brand}} </p>
+    <p>{{car.model}} </p>
+  </div>
+  <section class = "optionOverall">
+    {% for i in car_option %}
+      <article class = "optionSummary">
+        <div class = 'listOptions'>
+          <span class = 'name'><p>Name: {{i.name}}</p></span>
+          <span class = 'description'><p>Description:  {{i.description}}</p></span>
+          <span class = 'price'><p>Price:  {{i.price}}</p></span>
+          <span class = 'picture'><p>Picture:  {{i.picture}}</p></span>
+          <span class = 'user_id'><p>User Id:  {{i.user_id}}</p></span>
+        </div>
+        {% if login_session['username']!=nullable %}
+        <div class = "editDeletePane">
+          <a href='{{url_for('editOption', car_id= car.id, option_id = i.id)}}' >
+            <button class="ButtonDefault">  Edit  </button>
+          </a>
+          <a href='{{url_for('deleteOption', car_id = car.id, option_id = i.id)}}' >
+            <button class="ButtonDefault">  Delete  </button>
+          </a>
+        </div>
+        {% endif %}
+    </article>
+    {% endfor %}
+  </section>
+
+  <p></p>
+  {% if login_session['username']!=nullable %}
+  <a href='{{url_for('newOptionItem', car_id = car.id)}}' >
+    <button class="ButtonDefault">  Add Option  </button>
+  </a>
+
+  {% endif %}
+
+<p></p>
+   <a href = '{{url_for('showCars')}}'>
+     <button> Home </button>
+   </a>
+</body>

@@ -1,0 +1,55 @@
+<html>
+<head>
+  <title> Add New Car Option</title>
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='styles/styles.css') }}">
+
+</head>
+<body>
+  <p>
+      {% if login_session['username']!=nullable %}
+        <h2>Current User: {{login_session['username']}}</h2>
+        <a href='{{url_for('gdisconnect')}}' >
+          <button class="ButtonDefault">  LOGOUT  </button>
+        </a>
+      {% endif %}
+      {% if login_session['username']==nullable %}
+        <h2>View Only - Login to access edit mode</h2>
+        <a href='{{url_for('showLogin')}}' >
+          <button class="ButtonDefault">  LOGIN  </button>
+        </a>
+      {% endif %}
+  </P>
+<h1> New Car Option </h1>
+
+<div class = 'flash'>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li> <strong> {{ message }} </strong> </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+</div>
+
+<form action="{{url_for('newOptionItem', car_id=car_id )}}" method = 'POST'>
+
+<p>Name:</p>
+<input type='text' size='30' name='name'>
+<p>Description:</p>
+<input type='text' size='30' name='description'>
+<p>Price:</p>
+<input type='text' size='30' name='price'>
+<p>Picture:</p>
+<input type='text' size='30' name='picture'>
+
+
+<input type='submit' value='Create'>
+
+</form>
+
+</body>
+</html>

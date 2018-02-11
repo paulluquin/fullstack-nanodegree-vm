@@ -1,0 +1,19 @@
+<body>
+  <h1> Cars 2</h1>
+  <p>test</p>
+  {% for i in cars_table %}
+    <div class = 'ListCars'>
+      <p>{{i}}</p>
+      <span class = 'brand'><p>{{i.brand}}</p></span>
+      <span class = 'model'><p>{{i.model}}</p></span>
+      <span class = 'description'><p>{{i.description}}</p></span>
+    </div>
+    <div class = "editDeletePane">
+    	<a href='{{url_for('editCar', car_id = i.id)}}' >Edit</a>
+    	<a href='{{url_for('deleteCar', car_id = i.id)}}' >Delete</a>
+    </div>
+  {% endfor %}
+
+  <p></p>
+  <a href = '#'> Cancel </a>
+</body>

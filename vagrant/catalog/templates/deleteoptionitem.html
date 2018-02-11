@@ -1,0 +1,87 @@
+<html>
+<head>
+  <title> Delete Option </title>
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='styles/styles.css') }}">
+
+</head>
+<body>
+  <p>
+      {% if login_session['username']!=nullable %}
+        <h2>Current User: {{login_session['username']}}</h2>
+        <a href='{{url_for('gdisconnect')}}' >
+          <button class="ButtonDefault">  LOGOUT  </button>
+        </a>
+      {% endif %}
+      {% if login_session['username']==nullable %}
+        <h2>View Only - Login to access edit mode</h2>
+        <a href='{{url_for('showLogin')}}' >
+          <button class="ButtonDefault">  LOGIN  </button>
+        </a>
+      {% endif %}
+  </P>
+  <h1> Delete Option </h1>
+
+  <div class = 'flash'>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <form action = '{{url_for('deleteOption', car_id=car.id, option_id=optionToDelete.id)}}' method = 'POST'>
+
+    <section>
+      <h3>Car Selected:</h3>
+      <p> {{car.brand}}</p>
+      <p> {{car.model}}</p>
+    </section>
+
+    <p></P>
+    <p></P>
+
+    <section>
+      <h4>Name:</h4>
+      <p> {{optionToDelete.name}}</p>
+    </section>
+
+    <section>
+      <h4>Description</h4>
+      <p> {{optionToDelete.description}} </p>
+    </section>
+
+    <section>
+      <h4>Price</h4>
+      <p> {{optionToDelete.price}} </p>
+    </section>
+
+    <section>
+      <h4>Picture</h4>
+      <p> {{optionToDelete.picture}} </p>
+    </section>
+
+
+    <p></p>
+    {% if login_session['user_id']==optionToDelete.user_id %}
+      <input type='submit' value='Delete'>
+    {% else %}
+      <p>
+        You must be the owner of this Option to Delete
+        Logged is as user # {{login_session['user_id']}}
+        Option created by user # {{optionToDelete.user_id}}
+      </p>
+    {% endif %}
+  </form>
+  <a href = '{{url_for('showCars')}}'>
+    <button> Home </button>
+  </a>
+
+</body>
+
+</html>

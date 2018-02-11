@@ -1,0 +1,67 @@
+
+<html>
+<head>
+  <title> Car List </title>
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='styles/styles.css') }}">
+
+</head>
+<body>
+  <p>
+      {% if login_session['username']!=nullable %}
+        <h2>Current User: {{login_session['username']}}</h2>
+        <a href='{{url_for('gdisconnect')}}' >
+          <button class="ButtonDefault">  LOGOUT  </button>
+        </a>
+      {% endif %}
+      {% if login_session['username']==nullable %}
+        <h2>View Only - Login to access edit mode</h2>
+        <a href='{{url_for('showLogin')}}' >
+          <button class="ButtonDefault">  LOGIN  </button>
+        </a>
+      {% endif %}
+  </P>
+  <h1> Edit Menu Item </h1>
+
+  <div class = 'flash'>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <form action="{{url_for('editOption', car_id=car_id, option_id = option_id, editedOption=editedOption, editedCar=editedCar )}}" method = 'POST'>
+
+    <p>Name:</p>
+    <input type='text' size='30' name='name' placeholder = '{{editedOption.name}}'>
+    <p>Description:</p>
+    <input type='text' size='30' name='description' placeholder = '{{editedOption.description}}'>
+    <p>Price:</p>
+    <input type='text' size='30' name='price' placeholder = '{{editedOption.price}}'>
+    <p>Item:</p>
+    <input type='text' size='30' name='picture' placeholder = '{{editedOption.picture}}'>
+    {% if login_session['user_id']==editedOption.user_id %}
+      <input type='submit' value='Apply'>
+    {% else %}
+      <p>
+        You must be the owner of this Option to Edit
+        Logged is as user # {{login_session['user_id']}}
+        Option created by user # {{editedOption.user_id}}
+      </p>
+    {% endif %}
+  </form>
+  <a href='{{url_for('showOption', car_id = car_id)}}' >
+    <button class="ButtonDefault">  Go Back  </button>
+  </a>
+  <a href = '{{url_for('showCars')}}'>
+    <button> Home </button>
+  </a>
+</body>
+
+</html>

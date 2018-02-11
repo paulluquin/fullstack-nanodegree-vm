@@ -1,0 +1,89 @@
+<html>
+<head>
+  <title> Edit Car</title>
+  <link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='styles/styles.css') }}">
+
+</head>
+<body>
+  <p>
+      {% if login_session['username']!=nullable %}
+        <h2>Current User: {{login_session['username']}}</h2>
+        <a href='{{url_for('gdisconnect')}}' >
+          <button class="ButtonDefault">  LOGOUT  </button>
+        </a>
+      {% endif %}
+      {% if login_session['username']==nullable %}
+        <h2>View Only - Login to access edit mode</h2>
+        <a href='{{url_for('showLogin')}}' >
+          <button class="ButtonDefault">  LOGIN  </button>
+        </a>
+      {% endif %}
+  </P>
+  <h1> Delete Car </h1>
+
+  <div class = 'flash'>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li> <strong> {{ message }} </strong> </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+  </div>
+
+  <form action = '{{url_for('deleteCar', car_id=carToDelete.id)}}' method = 'POST'>
+
+    <section>
+      <h4>Name:</h4>
+      <p> {{carToDelete.brand}}</p>
+    </section>
+    <section>
+      <h4>Model:</h4>
+      <p> {{carToDelete.model}}</p>
+    </section>
+    <section>
+    </section>
+      <h4>Description</h4>
+      <p> {{carToDelete.description}} </p>
+    </section>
+    <section>
+    <br></br>
+      {% if login_session['user_id']==carToDelete.user_id %}
+      <input type='submit' value='Delete'>
+      {% else %}
+        <p>
+          You must be the owner of this Car to Delete
+          Logged is as user # {{login_session['user_id']}}
+          Option created by user # {{carToDelete.user_id}}
+        </p>
+      {% endif %}
+    </section>
+    <p></p>
+
+  </form>
+  <a href = '{{url_for('showCars', car_id=carToDelete.id)}}'>
+    <button> Cancel </button>
+  </a>
+  <h2>These options will also be deleted with the car</h2>
+  <section class = "optionOverall">
+
+    <p></p>
+    {% for o in car_option %}
+      <article class = "optionSummary">
+        <div class = 'listOptions'>
+          <span class = 'name'><p>Name: {{o.name}}</p></span>
+          <span class = 'description'><p>Description:  {{o.description}}</p></span>
+          <span class = 'price'><p>Price:  {{o.price}}</p></span>
+          <span class = 'picture'><p>Picture:  {{o.picture}}</p></span>
+          <span class = 'user_id'><p>User Id:  {{o.user_id}}</p></span>
+        </div>
+    </article>
+    {% endfor %}
+  </section>
+</body>
+
+</html>
